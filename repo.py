@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import os
 import argparse
 import subprocess
@@ -34,6 +35,42 @@ def get_repo_status(repo):
         statuses = set(line[:2].strip() for line in output.splitlines() if not line.startswith('##'))
         branch_status = output.splitlines()[0]
 
+        # print("BRANCH STATUS:")
+        # print(branch_status)
+        # print("STATUSES:")
+        # # print set as a list
+        # print(list(statuses))        
+        # print("=====================================")
+
+
+        status = ""
+        if len(statuses) == 0:
+            status = "Clean"
+        else:
+            result = []
+
+            if '??' in statuses:
+                result.append("Untracked Files")
+            
+            if 'M' in statuses:
+                result.append("Modified Files")
+        
+            # Return all the elements of the separated by " | "
+            status =  " | ".join(result)
+
+        if 'ahead' in branch_status and 'behind' in branch_status:
+            return status + " || Diverged"
+        elif 'ahead' in branch_status:
+            return status + " || Ahead"
+        elif 'behind' in branch_status:
+            return status + " || Behind"
+        else:
+            return status
+        
+        # Clean || Ahead => Yellow
+        # Clean || Behind => Yellow
+        # Clean || Diverged => Red
+        
         if any(status in {'??'} for status in statuses):
             return "Untracked Files"
         if any(status in {'M', 'A', 'D', 'R', 'C'} for status in statuses):

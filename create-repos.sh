@@ -67,69 +67,53 @@ create_unmerged_repo() {
 
 # Function to create a git repository ahead of remote
 create_ahead_repo() {
-    mkdir "$1"
+    git clone https://github.com/jlopezr/docker-ffmpeg-hw.git "$1"
     cd "$1" || exit
-    git init
-    touch README.md
-    git add README.md
-    git commit -m "Initial commit"
-    git remote add origin https://example.com/fake-repo.git
-    echo "New changes" > README.md
-    git add README.md
-    git commit -m "New commit"
+    touch TOUCHED.md
+    git add TOUCHED.md
+    git commit -m "TOUCHED"    
     cd ..
 }
 
 # Function to create a git repository behind remote
 create_behind_repo() {
-    mkdir "$1"
+    git clone https://github.com/jlopezr/docker-ffmpeg-hw.git "$1"
     cd "$1" || exit
-    git init
-    touch README.md
-    git add README.md
-    git commit -m "Initial commit"
-    git remote add origin https://example.com/fake-repo.git
-    git fetch origin
-    git reset --hard origin/main
+    # Remove the next commit from the history
+    git reset --hard HEAD~1
     cd ..
 }
 
 # Function to create a git repository that has diverged
 create_diverged_repo() {
-    mkdir "$1"
+    git clone https://github.com/jlopezr/docker-ffmpeg-hw.git "$1"
     cd "$1" || exit
-    git init
-    touch README.md
-    git add README.md
-    git commit -m "Initial commit"
-    git remote add origin https://example.com/fake-repo.git
-    echo "Local changes" > README.md
-    git add README.md
-    git commit -m "Local commit"
-    git fetch origin
-    git reset --hard origin/main
-    echo "Remote changes" > README.md
-    git add README.md
-    git commit -m "Remote commit"
+    # Remove the next commit from the history
+    git reset --hard HEAD~1
+    touch TOUCHED.md
+    git add TOUCHED.md
+    git commit -m "TOUCHED"    
     cd ..
 }
 
 # Main script
-create_clean_repo "Clean"
-create_untracked_repo "Untracked_Files"
-create_modified_repo "Modified_Files"
-create_staged_repo "Staged_Changes"
+# create_clean_repo "Clean"
+# create_untracked_repo "Untracked_Files"
+# create_modified_repo "Modified_Files"
+# create_staged_repo "Staged_Changes"
 create_unmerged_repo "Unmerged_Paths"
-create_ahead_repo "Ahead_of_Remote"
-create_behind_repo "Behind_Remote"
-create_diverged_repo "Diverged"
+# create_ahead_repo "Ahead_of_Remote"
+# create_behind_repo "Behind_Remote"
+# create_diverged_repo "Diverged"
 
-echo "Repositories created with the following statuses:"
-echo "1. Clean"
-echo "2. Untracked Files"
-echo "3. Modified Files"
-echo "4. Staged Changes"
-echo "5. Unmerged Paths"
-echo "6. Ahead of Remote"
-echo "7. Behind Remote"
-echo "8. Diverged"
+# echo ""
+# echo ""
+# echo "Repositories created with the following statuses:"
+# echo "1. Clean"
+# echo "2. Untracked Files"
+# echo "3. Modified Files"
+# echo "4. Staged Changes"
+# echo "5. Unmerged Paths"
+# echo "6. Ahead of Remote"
+# echo "7. Behind Remote"
+# echo "8. Diverged"
