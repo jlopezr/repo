@@ -31,12 +31,12 @@ def get_repo_status(repo):
         if not output:
             return "Clean"
 
-        statuses = set(line[:2].strip() for line in output.splitlines())
+        statuses = set(line[:2].strip() for line in output.splitlines() if not line.startswith('##'))
         branch_status = output.splitlines()[0]
 
         if any(status in {'??'} for status in statuses):
             return "Untracked Files"
-        if any(status in {'M', 'A', 'D', 'R', 'C', 'U'} for status in statuses):
+        if any(status in {'M', 'A', 'D', 'R', 'C'} for status in statuses):
             return "Modified Files"
         if any(status in {'M', 'A', 'D', 'R', 'C'} for status in statuses):
             return "Staged Changes"
