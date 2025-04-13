@@ -42,7 +42,6 @@ def get_repo_status(repo):
         # print(list(statuses))        
         # print("=====================================")
 
-
         status = ""
         if len(statuses) == 0:
             status = "Clean"
@@ -52,7 +51,8 @@ def get_repo_status(repo):
             if '??' in statuses:
                 result.append("Untracked Files")
             
-            if 'M' in statuses:
+            # if statuses has one of M,A,D,R,C then append "Modified Files"
+            if any(status in {'M', 'A', 'D', 'R', 'C'} for status in statuses):
                 result.append("Modified Files")
         
             # Return all the elements of the separated by " | "
@@ -71,23 +71,6 @@ def get_repo_status(repo):
         # Clean || Behind => Yellow
         # Clean || Diverged => Red
         
-        if any(status in {'??'} for status in statuses):
-            return "Untracked Files"
-        if any(status in {'M', 'A', 'D', 'R', 'C'} for status in statuses):
-            return "Modified Files"
-        if any(status in {'M', 'A', 'D', 'R', 'C'} for status in statuses):
-            return "Staged Changes"
-        if 'U' in statuses:
-            return "Unmerged Paths"
-
-        if 'ahead' in branch_status and 'behind' in branch_status:
-            return "Diverged"
-        if 'ahead' in branch_status:
-            return "Ahead of Remote"
-        if 'behind' in branch_status:
-            return "Behind Remote"
-
-        return "Unknown status"
     except subprocess.CalledProcessError as e:
         return f"Error getting status: {e}"
 
