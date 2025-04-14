@@ -35,6 +35,10 @@ def get_repo_status(repo):
         statuses = set(line[:2].strip() for line in output.splitlines() if not line.startswith('##'))
         branch_status = output.splitlines()[0]
 
+        # print("=====================================")
+        # print(output)
+        # print("=====================================")
+
         # print("BRANCH STATUS:")
         # print(branch_status)
         # print("STATUSES:")
@@ -50,6 +54,9 @@ def get_repo_status(repo):
 
             if '??' in statuses:
                 result.append("Untracked Files")
+
+            if 'UU' in statuses:
+                result.append("Unmerged Files")
             
             # if statuses has one of M,A,D,R,C then append "Modified Files"
             if any(status in {'M', 'A', 'D', 'R', 'C'} for status in statuses):
